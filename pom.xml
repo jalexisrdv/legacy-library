@@ -50,4 +50,8 @@
 		</dependency>
 	</dependencies>
 	
+	<modules>
+		<module>libraryms-model</module>
+		<module>libraryms-business</module>
+	</modules>
 </project>
