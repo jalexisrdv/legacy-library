@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+    xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+    
+    <persistence-unit name="libraryms" transaction-type="RESOURCE_LOCAL">
+        <non-jta-data-source>
+            java:comp/env/jdbc/libraryms
+        </non-jta-data-source>
+
+        <class>com.jardvcode.model.entity.BookEntity</class>
+        <class>com.jardvcode.model.entity.ExemplarEntity</class>
+        <class>com.jardvcode.model.entity.ReservationEntity</class>
+        <class>com.jardvcode.model.entity.LoanHistoricalEntity</class>
+        <class>com.jardvcode.model.entity.LibrarianEntity</class>
+        <class>com.jardvcode.model.entity.PenaltyEntity</class>
+        <class>com.jardvcode.model.entity.UserEntity</class>
+        <class>com.jardvcode.model.entity.StudentEntity</class>
+        <class>com.jardvcode.model.entity.TeacherEntity</class>
+
+        <properties>
+            <property name="hibernate.dialect"
+                value="org.hibernate.dialect.MySQLInnoDBDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="validate" />
+            <property name="hibernate.show_sql" value="true" />
+        </properties>
+    </persistence-unit>
+
+</persistence>
