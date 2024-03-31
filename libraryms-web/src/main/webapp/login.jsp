@@ -3,6 +3,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 
+<head>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<script src="./js/bootstrap.min.js"></script>
+</head>
+
 <body>
 	<form action="j_security_check" METHOD="POST">
 		<table>

@@ -26,7 +26,7 @@
 
 	<security-constraint>
 		<web-resource-collection>
-			<web-resource-name>FULL WEB SITE</web-resource-name>
+			<web-resource-name>Granting access to the entire website for specified roles</web-resource-name>
 			<url-pattern>/</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
@@ -35,6 +35,14 @@
 			<role-name>TEACHER</role-name>
 			<role-name>STUDENT</role-name>
 		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Granting access to the css and js files</web-resource-name>
+			<url-pattern>/css/*</url-pattern>
+			<url-pattern>/js/*</url-pattern>
+		</web-resource-collection>
 	</security-constraint>
 
 	<security-constraint>
