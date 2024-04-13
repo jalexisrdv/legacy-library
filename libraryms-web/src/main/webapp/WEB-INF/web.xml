@@ -5,6 +5,10 @@
 <web-app>
 	<display-name>LibraryMS</display-name>
 
+	<welcome-file-list>
+		<welcome-file>example</welcome-file>
+	</welcome-file-list>
+
 	<resource-ref>
 		<res-ref-name>jdbc/libraryms</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
@@ -36,7 +40,7 @@
 			<role-name>STUDENT</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Granting access to the css and js files</web-resource-name>
