@@ -24,6 +24,7 @@ import com.jardvcode.business.exception.PenaltyException;
 import com.jardvcode.business.service.impl.ReserverServiceImpl;
 import com.jardvcode.business.uitl.DataTest;
 import com.jardvcode.model.entity.BookEntity;
+import com.jardvcode.model.entity.FinalizationEnum;
 import com.jardvcode.model.entity.HistoricalStateEnum;
 import com.jardvcode.model.entity.PenaltyEntity;
 import com.jardvcode.model.entity.ReservationEntity;
@@ -186,6 +187,7 @@ public class ReserverServiceTest {
 		assertNotNull(reservationEntityCaptured);
 		assertNotNull(reservationEntityCaptured.getEndDate());
 		assertNotNull(reservationEntityCaptured.getFinalizationState());
+		assertEquals(FinalizationEnum.CANCELED, reservationEntityCaptured.getHistoricalState());
 		assertEquals(HistoricalStateEnum.HISTORICAL, reservationEntityCaptured.getHistoricalState());
 	}
 	
