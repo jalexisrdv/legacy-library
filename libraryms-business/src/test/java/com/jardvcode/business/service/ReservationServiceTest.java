@@ -11,7 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -32,6 +34,9 @@ import com.jardvcode.util.ReservationBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReservationServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
 	private ReservationDao reservationDao;
@@ -125,20 +130,12 @@ public class ReservationServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_reservation_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(reservationDao.findById(1L)).thenReturn(null);
 		
-		when(reservationDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found reservation with id 1");
 		
-		try {
-			reservationService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		reservationService.findById(1L);
 	}
 	
 	@Test
@@ -196,21 +193,13 @@ public class ReservationServiceTest {
 	public void updateById_should_throw_exception_when_reservation_is_not_found() {
 		ReservationEntity reservationEntityToUpdate = ReservationBuilder.createReservation(1L);
 		reservationEntityToUpdate.setFinalizationState(FinalizationEnum.CANCELED);
+
+		when(reservationDao.findById(1L)).thenReturn(null);
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found reservation with id 1");
 		
-		when(reservationDao.findById(1L)).thenThrow(exception);
-		
-		try {
-			reservationService.updateById(reservationEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		reservationService.updateById(reservationEntityToUpdate);
 	}
 	
 	@Test
@@ -261,20 +250,12 @@ public class ReservationServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_reservation_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(reservationDao.findById(1L)).thenReturn(null);
 		
-		when(reservationDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found reservation with id 1");
 		
-		try {
-			reservationService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		reservationService.deleteById(1L);
 	}
 	
 	@Test

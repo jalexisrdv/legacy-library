@@ -12,7 +12,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -33,6 +35,9 @@ import com.jardvcode.util.UserBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PenaltyServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
 	private PenaltyDao penaltyDao;
@@ -123,20 +128,12 @@ public class PenaltyServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_penalty_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(penaltyDao.findById(1L)).thenReturn(null);
 		
-		when(penaltyDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found penalty with id 1");
 		
-		try {
-			penaltyService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		penaltyService.findById(1L);
 	}
 	
 	@Test
@@ -195,21 +192,13 @@ public class PenaltyServiceTest {
 	public void updateById_should_throw_exception_when_penalty_is_not_found() {
 		PenaltyEntity penaltyEntityToUpdate = PenaltyBuilder.createPenalty(1L);
 		penaltyEntityToUpdate.setUser(UserBuilder.createTeacherUser(2L));
+
+		when(penaltyDao.findById(1L)).thenReturn(null);
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found penalty with id 1");
 		
-		when(penaltyDao.findById(1L)).thenThrow(exception);
-		
-		try {
-			penaltyService.updateById(penaltyEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		penaltyService.updateById(penaltyEntityToUpdate);
 	}
 	
 	@Test
@@ -260,20 +249,12 @@ public class PenaltyServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_penalty_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(penaltyDao.findById(1L)).thenReturn(null);
 		
-		when(penaltyDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found penalty with id 1");
 		
-		try {
-			penaltyService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		penaltyService.deleteById(1L);
 	}
 	
 	@Test

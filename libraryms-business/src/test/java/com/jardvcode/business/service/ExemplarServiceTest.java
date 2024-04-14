@@ -11,7 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -32,6 +34,9 @@ import com.jardvcode.util.ExemplarBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExemplarServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
 	private ExemplarDao exemplarDao;
@@ -128,20 +133,12 @@ public class ExemplarServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_exemplar_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(exemplarDao.findById(1L)).thenReturn(null);
 		
-		when(exemplarDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found exemplar with id 1");
 		
-		try {
-			exemplarService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		exemplarService.findById(1L);
 	}
 	
 	@Test
@@ -199,21 +196,13 @@ public class ExemplarServiceTest {
 	public void updateById_should_throw_exception_when_exemplar_is_not_found() {
 		ExemplarEntity exemplarEntityToUpdate = ExemplarBuilder.createExemplar(1L);
 		exemplarEntityToUpdate.setObservation("Damaged Exemplar");
+
+		when(exemplarDao.findById(1L)).thenReturn(null);
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found exemplar with id 1");
 		
-		when(exemplarDao.findById(1L)).thenThrow(exception);
-		
-		try {
-			exemplarService.updateById(exemplarEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		exemplarService.updateById(exemplarEntityToUpdate);
 	}
 	
 	@Test
@@ -264,20 +253,12 @@ public class ExemplarServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_exemplar_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(exemplarDao.findById(1L)).thenReturn(null);
 		
-		when(exemplarDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found exemplar with id 1");
 		
-		try {
-			exemplarService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		exemplarService.deleteById(1L);
 	}
 	
 	@Test

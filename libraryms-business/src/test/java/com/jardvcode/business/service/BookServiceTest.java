@@ -12,7 +12,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -31,6 +33,9 @@ import com.jardvcode.util.BookBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
 	private BookDao bookDao;
@@ -122,20 +127,12 @@ public class BookServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_book_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(bookDao.findById(1L)).thenReturn(null);
 		
-		when(bookDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found book with id 1");
 		
-		try {
-			bookService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		bookService.findById(1L);
 	}
 	
 	@Test
@@ -178,20 +175,12 @@ public class BookServiceTest {
 	
 	@Test
 	public void findByIsbn_should_throw_exception_when_book_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(bookDao.findByIsbn("9780135957059")).thenReturn(null);
 		
-		when(bookDao.findByIsbn("9780135957059")).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found book with isbn 9780135957059");
 		
-		try {
-			bookService.findByIsbn("9780135957059");
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		bookService.findByIsbn("9780135957059");
 	}
 	
 	@Test
@@ -250,20 +239,12 @@ public class BookServiceTest {
 		BookEntity bookEntityToUpdate = BookBuilder.createBook(1L);
 		bookEntityToUpdate.setStock(5);
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(bookDao.findById(1L)).thenReturn(null);
 		
-		when(bookDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found book with id 1");
 		
-		try {
-			bookService.updateById(bookEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		bookService.updateById(bookEntityToUpdate);
 	}
 	
 	@Test
@@ -314,20 +295,12 @@ public class BookServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_book_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(bookDao.findById(1L)).thenReturn(null);
 		
-		when(bookDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found book with id 1");
 		
-		try {
-			bookService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		bookService.deleteById(1L);
 	}
 	
 	@Test

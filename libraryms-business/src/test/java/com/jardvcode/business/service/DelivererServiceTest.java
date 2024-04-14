@@ -3,15 +3,14 @@ package com.jardvcode.business.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -34,9 +33,6 @@ import com.jardvcode.model.util.DateUtil;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DelivererServiceTest {
-	
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 	
 	private static DelivererService delivererService;
 	
@@ -189,44 +185,62 @@ public class DelivererServiceTest {
 	
 	@Test
 	public void returnExemplar_should_throw_exception_when_user_is_not_found() {
-		ExemplarEntity exemplaryEntityToFind = DataTest.STUDENT_A_BOOK_EXEMPLAR_TO_FIND;
+		NoDataFoundException exception = new NoDataFoundException("Not found user with nickname gabrielmar");
 		
-		when(userService.findByNickname("gabrielmar")).thenReturn(null);
+		ExemplarEntity exemplaryEntity = DataTest.STUDENT_A_BOOK_EXEMPLAR_TO_FIND;
 		
-		expectedException.expect(NoDataFoundException.class);
-		expectedException.expectMessage("The user with nickname gabrielmar is not found");
-				
-		delivererService.returnExemplar(exemplaryEntityToFind);
+		when(userService.findByNickname("gabrielmar")).thenThrow(exception);
+		
+		try {
+			delivererService.returnExemplar(exemplaryEntity);
+			fail();
+		} catch(NoDataFoundException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void returnExemplar_should_throw_exception_when_book_is_not_found() {
+		NoDataFoundException exception = new NoDataFoundException("Not found book with isbn 9780132350884");
+		
 		ExemplarEntity exemplaryEntity = DataTest.STUDENT_A_BOOK_EXEMPLAR_TO_FIND;
 		UserEntity userEntity = DataTest.STUDENT_USER;
 		
 		when(userService.findByNickname("gabrielmar")).thenReturn(userEntity);
-		when(bookService.findByIsbn("9780132350884")).thenReturn(null);
+		when(bookService.findByIsbn("9780132350884")).thenThrow(exception);
 		
-		expectedException.expect(NoDataFoundException.class);
-		expectedException.expectMessage("The book with isbn 9780132350884 is not found");
-				
-		delivererService.returnExemplar(exemplaryEntity);
+		try {
+			delivererService.returnExemplar(exemplaryEntity);
+			fail();
+		} catch(NoDataFoundException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void returnExemplar_should_throw_exception_when_exemplar_is_not_found() {
+		NoDataFoundException exception = new NoDataFoundException("Not found exemplar with id 1");
+		
 		ExemplarEntity exemplaryEntity = DataTest.STUDENT_A_BOOK_EXEMPLAR_TO_FIND;
 		UserEntity userEntity = DataTest.STUDENT_USER;
 		BookEntity bookEntity = DataTest.BOOK;
 		
 		when(userService.findByNickname("gabrielmar")).thenReturn(userEntity);
 		when(bookService.findByIsbn("9780132350884")).thenReturn(bookEntity);
-		when(exemplarService.findExemplarByBookIdAndExemplarId(1L, "A")).thenReturn(null);
+		when(exemplarService.findExemplarByBookIdAndExemplarId(1L, "A")).thenThrow(exception);
 		
-		expectedException.expect(NoDataFoundException.class);
-		expectedException.expectMessage("The exemplary A of book with isbn 9780132350884 is not found");
-				
-		delivererService.returnExemplar(exemplaryEntity);
+		try {
+			delivererService.returnExemplar(exemplaryEntity);
+			fail();
+		} catch(NoDataFoundException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
 	}
 
 }

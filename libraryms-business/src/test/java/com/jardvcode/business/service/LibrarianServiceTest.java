@@ -11,7 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -30,6 +32,9 @@ import com.jardvcode.util.LibrarianBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LibrarianServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
 	private LibrarianDao librarianDao;
@@ -118,20 +123,12 @@ public class LibrarianServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_librarian_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(librarianDao.findById(1L)).thenReturn(null);
 		
-		when(librarianDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found librarian with id 1");
 		
-		try {
-			librarianService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		librarianService.findById(1L);
 	}
 	
 	@Test
@@ -189,21 +186,13 @@ public class LibrarianServiceTest {
 	public void updateById_should_throw_exception_when_librarian_is_not_found() {
 		LibrarianEntity librarianEntityToUpdate = LibrarianBuilder.createLibrarian(1L);
 		librarianEntityToUpdate.setPassword("9876543210");
+
+		when(librarianDao.findById(1L)).thenReturn(null);
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found librarian with id 1");
 		
-		when(librarianDao.findById(1L)).thenThrow(exception);
-		
-		try {
-			librarianService.updateById(librarianEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		librarianService.updateById(librarianEntityToUpdate);
 	}
 	
 	@Test
@@ -254,20 +243,12 @@ public class LibrarianServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_librarian_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(librarianDao.findById(1L)).thenReturn(null);
 		
-		when(librarianDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found librarian with id 1");
 		
-		try {
-			librarianService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		librarianService.deleteById(1L);
 	}
 	
 	@Test

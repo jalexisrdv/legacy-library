@@ -3,6 +3,7 @@ package com.jardvcode.business.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -84,14 +85,20 @@ public class ReserverServiceTest {
 	
 	@Test
 	public void reserveBook_should_throw_exception_when_user_is_not_found() {
+		NoDataFoundException exception = new NoDataFoundException("Not found user with nickname gabrielmar");
+		
 		ReservationEntity reservationEntity = DataTest.STUDENT_ACTIVE_BOOK_RESERVATION;
 
-		when(userService.findByNickname("gabrielmar")).thenReturn(null);
+		when(userService.findByNickname("gabrielmar")).thenThrow(exception);
 		
-		expectedException.expect(NoDataFoundException.class);
-		expectedException.expectMessage("The user with nickname gabrielmar is not found");
-		
-		reserverService.reserveBook(reservationEntity);
+		try {
+			reserverService.reserveBook(reservationEntity);
+			fail();
+		} catch(NoDataFoundException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -142,18 +149,24 @@ public class ReserverServiceTest {
 
 	@Test
 	public void reserveBook_should_throw_exception_when_book_is_not_found() {
+		NoDataFoundException exception = new NoDataFoundException("Not found book with isbn 9780132350884");
+		
 		UserEntity userEntity = DataTest.STUDENT_USER;
 		ReservationEntity reservationEntity = DataTest.STUDENT_ACTIVE_BOOK_RESERVATION;
 
 		when(userService.findByNickname("gabrielmar")).thenReturn(userEntity);
 		when(penaltyService.findActivePenaltyByUserId(1L)).thenReturn(null);
 		when(userService.countOperationsByUserId(1L)).thenReturn(0);
-		when(bookService.findByIsbn("9780132350884")).thenReturn(null);
+		when(bookService.findByIsbn("9780132350884")).thenThrow(exception);
 		
-		expectedException.expect(NoDataFoundException.class);
-		expectedException.expectMessage("The book with isbn 9780132350884 is not found");
-		
-		reserverService.reserveBook(reservationEntity);
+		try {
+			reserverService.reserveBook(reservationEntity);
+			fail();
+		} catch(NoDataFoundException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -178,14 +191,20 @@ public class ReserverServiceTest {
 	
 	@Test
 	public void cancelBookReservation_should_throw_exception_when_reservation_is_not_found() {
-		ReservationEntity reservationEntityToFind = DataTest.STUDENT_ACTIVE_BOOK_RESERVATION_TO_FIND;
-
-		when(reservationService.findById(anyLong())).thenReturn(null);
+		NoDataFoundException exception = new NoDataFoundException("Not found reservation with id 1");
 		
-		expectedException.expect(NoDataFoundException.class);
-		expectedException.expectMessage("The reservation is not found");
+		ReservationEntity reservationEntity = DataTest.STUDENT_ACTIVE_BOOK_RESERVATION_TO_FIND;
 
-		reserverService.cancelBookReservation(reservationEntityToFind);
+		when(reservationService.findById(anyLong())).thenThrow(exception);
+		
+		try {
+			reserverService.cancelBookReservation(reservationEntity);
+			fail();
+		} catch(NoDataFoundException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
 	}
 
 }

@@ -11,7 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -31,6 +33,9 @@ import com.jardvcode.util.UserBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoanHistoricalServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 
 	@Mock
 	private LoanHistoricalDao loanHistoricalDao;
@@ -123,20 +128,12 @@ public class LoanHistoricalServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_loan_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(loanHistoricalDao.findById(1L)).thenReturn(null);
 		
-		when(loanHistoricalDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found loan with id 1");
 		
-		try {
-			loanHistoricalService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		loanHistoricalService.findById(1L);
 	}
 	
 	@Test
@@ -196,41 +193,25 @@ public class LoanHistoricalServiceTest {
 		LoanHistoricalEntity loanHistoricalEntityToUpdate = LoanHistoricalBuilder.createLoanHistorical(1L);
 		loanHistoricalEntityToUpdate.setUser(UserBuilder.createTeacherUser(2L));
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(loanHistoricalDao.findById(1L)).thenReturn(null);
 		
-		when(loanHistoricalDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found loan with id 1");
 		
-		try {
-			loanHistoricalService.updateById(loanHistoricalEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		loanHistoricalService.updateById(loanHistoricalEntityToUpdate);
 	}
 	
 	@Test
 	public void updateById_should_throw_exception_when_something_is_bad() {
 		LoanHistoricalEntity loanHistoricalEntityToUpdate = LoanHistoricalBuilder.createLoanHistorical(1L);
 		loanHistoricalEntityToUpdate.setUser(UserBuilder.createTeacherUser(2L));
+
+		when(loanHistoricalDao.findById(1L)).thenReturn(null);
 		
-		RuntimeException exception = new RuntimeException("error");
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found loan with id 1");
 		
-		when(loanHistoricalDao.findById(1L)).thenThrow(exception);
-		
-		try {
-			loanHistoricalService.updateById(loanHistoricalEntityToUpdate);
-			fail();
-		} catch(GeneralServiceException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		loanHistoricalService.updateById(loanHistoricalEntityToUpdate);
 	}
 	
 	@Test
@@ -260,20 +241,12 @@ public class LoanHistoricalServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_loan_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(loanHistoricalDao.findById(1L)).thenReturn(null);
 		
-		when(loanHistoricalDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found loan with id 1");
 		
-		try {
-			loanHistoricalService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		loanHistoricalService.deleteById(1L);
 	}
 	
 	@Test

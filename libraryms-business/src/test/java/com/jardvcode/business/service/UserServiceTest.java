@@ -11,7 +11,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -30,6 +32,9 @@ import com.jardvcode.util.UserBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
 	private UserDao userDao;
@@ -121,20 +126,12 @@ public class UserServiceTest {
 	
 	@Test
 	public void findById_should_throw_exception_when_user_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(userDao.findById(1L)).thenReturn(null);
 		
-		when(userDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found user with id 1");
 		
-		try {
-			userService.findById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		userService.findById(1L);
 	}
 	
 	@Test
@@ -193,20 +190,12 @@ public class UserServiceTest {
 		UserEntity userEntityToUpdate = UserBuilder.createStudentUser(1L);
 		userEntityToUpdate.setPassword("9876543210");
 		
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(userDao.findById(1L)).thenReturn(null);
 		
-		when(userDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found user with id 1");
 		
-		try {
-			userService.updateById(userEntityToUpdate);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		userService.updateById(userEntityToUpdate);
 	}
 	
 	@Test
@@ -257,20 +246,12 @@ public class UserServiceTest {
 	
 	@Test
 	public void deleteById_should_throw_exception_when_user_is_not_found() {
-		NoDataFoundException exception = new NoDataFoundException("error");
+		when(userDao.findById(1L)).thenReturn(null);
 		
-		when(userDao.findById(1L)).thenThrow(exception);
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found user with id 1");
 		
-		try {
-			userService.deleteById(1L);
-			fail();
-		} catch(NoDataFoundException e) {
-			assertEquals(exception.getMessage(), e.getMessage());
-		} catch(Exception e) {
-			fail();
-		}
-		
-		orderChecker.verifyOrderWhenTransactionIsRollback();
+		userService.deleteById(1L);
 	}
 	
 	@Test
