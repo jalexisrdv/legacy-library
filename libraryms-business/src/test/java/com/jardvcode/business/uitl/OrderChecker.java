@@ -39,9 +39,9 @@ public class OrderChecker<T, K> {
 	}
 
 	public void verifyOrderWhenTransactionIsBegun() {
-		verify(entityManagerFactory, times(1)).createEntityManager();
-		verify(entityTransaction, times(1)).begin();
-		verify(dao, times(1)).setEntityManager(entityManager);
+		verify(entityManagerFactory, times(1).description("EntityManager was not created")).createEntityManager();
+		verify(entityTransaction, times(1).description("Transaction was not begun")).begin();
+		verify(dao, times(1).description("EntityManager was not set")).setEntityManager(entityManager);
 		
 		order.verify(entityManagerFactory).createEntityManager();
 		order.verify(entityTransaction).begin();
@@ -49,16 +49,16 @@ public class OrderChecker<T, K> {
 	}
 	
 	public void verifyOrderWhenTransactionIsCommit() {
-		verify(entityTransaction, times(1)).commit();
-		verify(entityManager, times(1)).close();
+		verify(entityTransaction, times(1).description("Transaction was not committed")).commit();
+		verify(entityManager, times(1).description("Connection was not closed")).close();
 		
 		order.verify(entityTransaction).commit();
 		order.verify(entityManager).close();
 	}
 	
 	public void verifyOrderWhenTransactionIsRollback() {
-		verify(entityTransaction, times(1)).rollback();
-		verify(entityManager, times(1)).close();
+		verify(entityTransaction, times(1).description("Rollback was not done")).rollback();
+		verify(entityManager, times(1).description("Connection was not closed")).close();
 		
 		order.verify(entityTransaction).rollback();
 		order.verify(entityManager).close();
