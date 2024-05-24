@@ -1,6 +1,8 @@
 package com.jardvcode.business.uitl;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import com.jardvcode.model.entity.BookExemplaryEnum;
 import com.jardvcode.model.entity.ExemplarEntity;
@@ -17,5 +19,7 @@ public class ExemplarDataTest {
 			BookExemplaryEnum.AVAILABLE, LocationEnum.SITTING_ROOM, 
 			BookBuilder.createBook(1L), UserBuilder.createStudentUser(1L)
 	);
+	
+	public static final List<ExemplarEntity> EXEMPLARES = Arrays.asList(EXEMPLAR_SAVED);
 
 }

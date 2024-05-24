@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -132,6 +133,23 @@ public class BookExemplarDaoTest {
 		entityManager.close();
 		
 		assertNull(exemplarEntityDeleted);
+	}
+	
+	@Test
+	public void findExemplaresByUserId_should_find_exemplares_by_user_id() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		
+		ExemplarDaoImpl exemplarDao = new ExemplarDaoImpl(entityManager);
+		List<ExemplarEntity> exemplares = exemplarDao.findExemplaresByUserId(1L);
+		
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		
+		assertNotNull(exemplares);
+		assertEquals(1L, exemplares.size());
+		assertNotNull(exemplares.get(0).getUser());
+		assertEquals(1L, exemplares.get(0).getUser().getId().longValue());
 	}
 
 }

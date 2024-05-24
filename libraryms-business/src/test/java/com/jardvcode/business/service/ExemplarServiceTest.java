@@ -10,6 +10,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -269,6 +271,54 @@ public class ExemplarServiceTest {
 		
 		try {
 			exemplarService.deleteById(1L);
+			fail();
+		} catch(GeneralServiceException e) {
+			assertEquals(exception.getMessage(), e.getMessage());
+		} catch(Exception e) {
+			fail();
+		}
+		
+		orderChecker.verifyOrderWhenTransactionIsRollback();
+	}
+	
+	@Test
+	public void findBooksByUserId_should_find_books_by_user_id() {
+		List<ExemplarEntity> exemplaries = ExemplarDataTest.EXEMPLARES;
+		
+		Long userId = 1L;
+		
+		when(exemplarDao.findExemplaresByUserId(userId)).thenReturn(exemplaries);
+		
+		List<ExemplarEntity> exemplariesFound = exemplarService.findExemplaresByUserId(userId);
+		
+		assertNotNull(exemplariesFound);
+		assertEquals(1, exemplariesFound.size());
+		
+		verify(exemplarDao, times(1)).findExemplaresByUserId(userId);
+		
+		orderChecker.verifyOrderWhenTransactionIsBegun();
+		orderChecker.getInOrder().verify(exemplarDao).findExemplaresByUserId(anyLong());
+		orderChecker.verifyOrderWhenTransactionIsCommit();
+	}
+	
+	@Test
+	public void findBooksByUserId_should_throw_exception_when_books_are_not_found() {
+		when(exemplarDao.findExemplaresByUserId(1L)).thenReturn(null);
+		
+		expectedException.expect(NoDataFoundException.class);
+		expectedException.expectMessage("Not found exemplares for user with id 1");
+		
+		exemplarService.findExemplaresByUserId(1L);
+	}
+	
+	@Test
+	public void findBooksByUserId_should_throw_exception_when_something_is_bad() {
+		RuntimeException exception = new RuntimeException("error");
+		
+		when(exemplarDao.findExemplaresByUserId(1L)).thenThrow(exception);
+		
+		try {
+			exemplarService.findExemplaresByUserId(1L);
 			fail();
 		} catch(GeneralServiceException e) {
 			assertEquals(exception.getMessage(), e.getMessage());
