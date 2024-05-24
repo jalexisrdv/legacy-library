@@ -10,11 +10,15 @@ import com.jardvcode.model.exception.DaoException;
 public abstract class CrudDaoImpl<T, K> implements CrudDao<T, K> {
 
 	protected EntityManager entityManager;
-
+	
+	public CrudDaoImpl() {
+		
+	}
+	
 	public CrudDaoImpl(EntityManager entityManager) {
-		if (!entityManager.getTransaction().isActive())
-			throw new TransactionRequiredException("Is requiered an active transaction to build the DAO");
-		this.entityManager = entityManager;
+	    if(!entityManager.getTransaction().isActive()) 
+	        throw new TransactionRequiredException("Is requiered an active transaction to build the DAO");
+	    this.entityManager = entityManager;
 	}
 
 	public EntityManager getEntityManager() {

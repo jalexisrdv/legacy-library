@@ -31,6 +31,14 @@ public class PersistenceManager {
       }
       return emf.createEntityManager();
    }
+   
+   public EntityManagerFactory createEntityManagerFactory() {
+	      if (emf == null) {
+	         emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+	         this.setEntityManagerFactory(emf);
+	      }
+	      return emf;
+	   }
  
    public void close() {
       if (emf != null)

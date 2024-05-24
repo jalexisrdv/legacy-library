@@ -1,7 +1,12 @@
 package com.jardvcode.business.service.impl;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import com.jardvcode.business.exception.GeneralServiceException;
+import com.jardvcode.business.exception.NoDataFoundException;
 import com.jardvcode.business.service.ExemplarService;
 import com.jardvcode.model.dao.ExemplarDao;
 import com.jardvcode.model.entity.ExemplarEntity;
@@ -44,6 +49,28 @@ public class ExemplarServiceImpl implements ExemplarService {
 	@Override
 	public void deleteById(Long id) {
 		
+	}
+
+	@Override
+	public List<ExemplarEntity> findExemplaresByUserId(Long userId) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			exemplarDao.setEntityManager(entityManager);
+			List<ExemplarEntity> exemplares = exemplarDao.findExemplaresByUserId(userId);
+			entityManager.getTransaction().commit();
+			
+			if(exemplares == null) throw new NoDataFoundException("Not found exemplares for user with id " + userId);
+			
+			return exemplares;
+		} catch(NoDataFoundException e) {
+			throw e;
+		} catch(Exception e) {
+			if(entityManager.getTransaction().isActive()) entityManager.getTransaction().rollback();
+			throw new GeneralServiceException(e.getMessage());
+		} finally {
+			entityManager.close();
+		}
 	}
 
 }
