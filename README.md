@@ -15,3 +15,5 @@ This application was developed to practice Test Driven Development (TDD) and Jav
 ## Testing
 
 ![Testing](testing.jpg)
+
+![Testing](business-testing.jpg)
