@@ -1,4 +1,4 @@
-<%@page import="com.jardvcode.web.dto.exemplar.ExemplarDTO"%>
+<%@page import="com.jardvcode.web.dto.ExemplarDTO"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>

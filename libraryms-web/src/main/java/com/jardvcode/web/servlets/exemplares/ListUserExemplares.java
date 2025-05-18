@@ -17,7 +17,7 @@ import com.jardvcode.business.exception.LibraryException;
 import com.jardvcode.business.service.ExemplarService;
 import com.jardvcode.business.util.ServiceFactory;
 import com.jardvcode.model.entity.ExemplarEntity;
-import com.jardvcode.web.dto.exemplar.ExemplarDTO;
+import com.jardvcode.web.dto.ExemplarDTO;
 import com.jardvcode.web.mapper.ExemplarMapper;
 
 @WebServlet(value = "/user-exemplares")

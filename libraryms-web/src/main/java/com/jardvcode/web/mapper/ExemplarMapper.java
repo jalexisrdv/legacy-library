@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jardvcode.model.entity.ExemplarEntity;
-import com.jardvcode.web.dto.exemplar.ExemplarDTO;
+import com.jardvcode.web.dto.ExemplarDTO;
 
 public class ExemplarMapper {
 	

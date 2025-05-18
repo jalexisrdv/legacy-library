@@ -1,4 +1,4 @@
-package com.jardvcode.web.dto.exemplar;
+package com.jardvcode.web.dto;
 
 public class ExemplarDTO {
 	

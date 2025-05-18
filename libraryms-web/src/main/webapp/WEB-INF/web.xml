@@ -33,12 +33,12 @@
 			<web-resource-name>Granting access to the entire website for specified roles</web-resource-name>
 			<url-pattern>/</url-pattern>
 		</web-resource-collection>
-		<auth-constraint>
+		<!-- <auth-constraint>
 			<role-name>ADMIN</role-name>
 			<role-name>LIBRARIAN</role-name>
 			<role-name>TEACHER</role-name>
 			<role-name>STUDENT</role-name>
-		</auth-constraint>
+		</auth-constraint> -->
 	</security-constraint>
 
 	<security-constraint>
