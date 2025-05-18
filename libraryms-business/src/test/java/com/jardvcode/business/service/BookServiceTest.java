@@ -418,10 +418,10 @@ public class BookServiceTest {
 		assertNotNull(booksFound);
 		assertEquals(1, booksFound.size());
 		
-		verify(bookDao, times(1)).searchBooksByTitle(anyString(), 0, 1);
+		verify(bookDao, times(1)).searchBooksByTitle(title, 0, 1);
 		
 		orderChecker.verifyOrderWhenTransactionIsBegun();
-		orderChecker.getInOrder().verify(bookDao).searchBooksByTitle(anyString(), 0, 1);
+		orderChecker.getInOrder().verify(bookDao).searchBooksByTitle(title, 0, 1);
 		orderChecker.verifyOrderWhenTransactionIsCommit();
 	}
 	
