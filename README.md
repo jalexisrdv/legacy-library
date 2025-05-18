@@ -11,3 +11,7 @@ This application was developed to practice Test Driven Development (TDD) and Jav
 ## Deployed App
 
 ![Deployed App](app-started.jpg)
+
+## Testing
+
+![Testing](testing.jpg)
