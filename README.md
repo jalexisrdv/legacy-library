@@ -8,7 +8,7 @@ This application was developed to practice Test Driven Development (TDD) and Jav
 - Eclipse IDE for Enterprise Java and Web Developers 2022-12
 
 
-## Deployed App
+## App started
 
 ![Deployed App](app-started.jpg)
 
