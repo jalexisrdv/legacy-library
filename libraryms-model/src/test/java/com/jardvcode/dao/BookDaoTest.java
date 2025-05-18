@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -134,6 +135,36 @@ public class BookDaoTest {
 		
 		assertNotNull(bookEntityFound);
 		assertEquals("9780132350884", bookEntityFound.getIsbn());
+	}
+	
+	@Test
+	public void countFoundBooksByTitle_should_count_searched_books_by_title() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		
+		BookDaoImpl bookDao = new BookDaoImpl(entityManager);
+		Long searchedBooks = bookDao.countSearchedBooksByTitle("Clean");
+		
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		
+		assertNotNull(searchedBooks);
+		assertEquals(3L, searchedBooks.longValue());
+	}
+	
+	@Test
+	public void findBooksByTitle_should_find_books_by_title() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		
+		BookDaoImpl bookDao = new BookDaoImpl(entityManager);
+		List<BookEntity> books = bookDao.searchBooksByTitle("Clean", 0, 1);
+		
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		
+		assertNotNull(books);
+		assertEquals(3, books.size());
 	}
 
 }
